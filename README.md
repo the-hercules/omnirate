@@ -1,0 +1,1 @@
+OmniRate is a stateless, distributed rate-limiting service designed to be consumed by API gateways or edge services. It enforces token-bucket based limits using Redis and Lua for correctness under concurrency. It is not a gateway itself and does not proxy requests.
