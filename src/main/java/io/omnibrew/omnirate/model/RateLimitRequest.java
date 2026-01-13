@@ -1,9 +1,16 @@
 package io.omnibrew.omnirate.model;
 
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
 public class RateLimitRequest {
 
+    @NotBlank
     private String key;
+     @Positive
     private long capacity;
+     @Positive
     private double refillRate;
 
     public RateLimitRequest(){}

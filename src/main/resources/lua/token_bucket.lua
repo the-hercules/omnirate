@@ -9,6 +9,10 @@ local capacity = tonumber(ARGV[1])
 local refill_rate = tonumber(ARGV[2])
 local now = tonumber(ARGV[3])
 
+if refill_rate <= 0 then
+   return {0, 0}
+end
+
 local data = redis.call("HMGET", key, "tokens", "last_refill_ts")
 
 local tokens = tonumber(data[1])

@@ -2,6 +2,7 @@ package io.omnibrew.omnirate.controller;
 
 import io.omnibrew.omnirate.model.RateLimitResponse;
 import io.omnibrew.omnirate.model.RateLimitRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ public class RateLimitController {
     }
 
     @PostMapping("/check")
-    public ResponseEntity<RateLimitResponse> checkRateLimit(@RequestBody RateLimitRequest request) {
+    public ResponseEntity<RateLimitResponse> checkRateLimit(@Valid @RequestBody RateLimitRequest request) {
         RateLimitResponse response = rateLimitService.checkRateLimit(request);
         if(!response.isAllowed()){
             return ResponseEntity.status(429).body(response);
