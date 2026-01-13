@@ -9,7 +9,6 @@ local capacity = tonumber(ARGV[1])
 local refill_rate = tonumber(ARGV[2])
 local now = tonumber(ARGV[3])
 
-
 local data = redis.call("HMGET", key, "tokens", "last_refill_ts")
 
 local tokens = tonumber(data[1])
@@ -25,20 +24,22 @@ end
 
 local delta = math.max(0, now - last_refill)
 local refill_tokens = (delta / 1000) * refill_rate
-tokens = math.min(capacity, tokens + refill_tokens)
+
+if refill_tokens > 0 then
+    tokens = math.min(capacity, tokens + refill_tokens)
+    last_refill = now
+end
 
 local allowed = 0
-if tokens>=1 then
+if tokens >= 1 then
     tokens = tokens - 1
     allowed = 1
 end
 
 redis.call("HMSET", key,
   "tokens", tokens,
-  "last_refill_ts", now
+  "last_refill_ts", last_refill
 )
-
---  TTL = time to fully refill * 2 (cleanup inactive keys)
 
 local ttl = math.ceil((capacity / refill_rate) * 2)
 redis.call("EXPIRE", key, ttl)

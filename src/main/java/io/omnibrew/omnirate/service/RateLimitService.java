@@ -22,7 +22,7 @@ public class RateLimitService {
     }
 
     public RateLimitResponse checkRateLimit(RateLimitRequest rateLimitRequest) {
-        String redisKey = "rate:" + rateLimitRequest.getKey();
+        String redisKey = "uniqueKey:" + rateLimitRequest.getKey();
         RateLimitResult rateLimitResult = redisRateLimiter.check(
                 redisKey,
                 rateLimitRequest.getCapacity(),
